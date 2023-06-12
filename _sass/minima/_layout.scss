@@ -285,6 +285,12 @@
   }
 }
 
+.post-content p {
+  max-width: 80ch;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
 
 .social-media-list {
   display: table;
