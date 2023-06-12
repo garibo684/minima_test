@@ -28,17 +28,19 @@ layout: base
 
   <div class="post-content e-content" itemprop="articleBody">
   {% assign words_per_line_limit = 80 %} 
-  {% assign words = content | split: ' ' %}
-  {% for word in words %}
-    {% assign word_count = word | number_of_words %}
-    {% if word_count > words_per_line_limit %}
-      <p>{{ word | truncatewords: words_per_line_limit }}<br>
-        {{ word | remove_first: word | truncatewords: word_count - words_per_line_limit }}</p>
-    {% else %}
-      <p>{{ word }}</p>
-    {% endif %}
+  {% assign lines = content | newline_to_br | split: '<br />' %}
+  {% for line in lines %}
+    {% assign words = line | split: ' ' %}
+    {% assign word_count = words | size %}
+    {% for i in (0..words | size) | divided_by: words_per_line_limit %}
+      {% assign start_index = i | times: words_per_line_limit %}
+      {% assign end_index = start_index | plus: words_per_line_limit %}
+      {% assign line_words = words | slice: start_index, end_index %}
+      <p>{{ line_words | join: ' ' }}</p>
+    {% endfor %}
   {% endfor %}
  </div>
+
 
 
   {%- if site.disqus.shortname -%}
