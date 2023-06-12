@@ -27,8 +27,19 @@ layout: base
   </header>
 
   <div class="post-content e-content" itemprop="articleBody">
-    {{ content }}
-  </div>
+  {% assign words_per_line_limit = 80 %} 
+  {% assign words = content | split: ' ' %}
+  {% for word in words %}
+    {% assign word_count = word | number_of_words %}
+    {% if word_count > words_per_line_limit %}
+      <p>{{ word | truncatewords: words_per_line_limit }}<br>
+        {{ word | remove_first: word | truncatewords: word_count - words_per_line_limit }}</p>
+    {% else %}
+      <p>{{ word }}</p>
+    {% endif %}
+  {% endfor %}
+ </div>
+
 
   {%- if site.disqus.shortname -%}
     {%- include disqus_comments.html -%}
